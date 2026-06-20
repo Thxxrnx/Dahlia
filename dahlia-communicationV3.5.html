@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dahlia Communication</title>
+<link href="https://fonts.cdnfonts.com/css/glacial-indifference-2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --beige:#FAF6EF;--beige3:#EDE0C8;
+  --noir:#1A1410;--noir2:#2C2218;
+  --brun:#7A5C3A;--brun-l:#A8845C;--brun-d:#5C4228;
+  --text:#2C2218;--muted:#6B5544;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Glacial Indifference',sans-serif;background:var(--beige);color:var(--text);overflow-x:hidden;line-height:1.7}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 4rem;background:rgba(250,246,239,.92);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:all .3s}
+nav.scrolled{background:rgba(250,246,239,.98);border-bottom:1px solid rgba(122,92,58,.15)}
+.nav-logo img{height:65px;width:auto;display:block}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--noir)}
+.nav-cta{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;padding:.6rem 1.4rem;border:1.5px solid var(--brun);color:var(--brun);text-decoration:none;transition:all .3s}
+.nav-cta:hover{background:var(--brun);color:var(--beige)}
+#hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;background:var(--beige)}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:8rem 3rem 8rem 4rem}
+.hero-right{position:relative;overflow:hidden}
+.hero-right img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.hero-right::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,var(--beige) 0%,transparent 18%)}
+.hero-eyebrow{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--brun);margin-bottom:1.5rem;opacity:0;animation:fadeUp .9s ease forwards .2s}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,7vw,6.5rem);font-weight:300;line-height:1.05;color:var(--noir);opacity:0;animation:fadeUp .9s ease forwards .4s}
+.hero-title em{font-style:italic;color:var(--brun)}
+.hero-sub{margin-top:1.8rem;font-size:.95rem;color:var(--muted);max-width:420px;letter-spacing:.03em;opacity:0;animation:fadeUp .9s ease forwards .6s}
+.hero-actions{display:flex;gap:1.2rem;margin-top:2.8rem;flex-wrap:wrap;opacity:0;animation:fadeUp .9s ease forwards .8s}
+.hero-scroll{margin-top:4rem;display:flex;align-items:center;gap:1rem;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);opacity:0;animation:fadeUp .9s ease forwards 1.2s}
+.hero-scroll::before{content:'';display:block;width:40px;height:1px;background:var(--brun-l)}
+.btn-p{display:inline-flex;align-items:center;gap:.5rem;background:var(--noir);color:var(--beige);padding:.9rem 2.2rem;font-family:'Glacial Indifference',sans-serif;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;transition:all .3s;border:none;cursor:pointer}
+.btn-p:hover{background:var(--noir2);transform:translateY(-2px)}
+.btn-s{display:inline-flex;align-items:center;gap:.5rem;border:1.5px solid var(--brun);color:var(--brun);padding:.9rem 2.2rem;font-family:'Glacial Indifference',sans-serif;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;transition:all .3s;background:transparent}
+.btn-s:hover{background:var(--brun);color:var(--beige);transform:translateY(-2px)}
+.btn-pl{display:inline-flex;align-items:center;gap:.5rem;background:var(--beige);color:var(--noir);padding:.9rem 2.2rem;font-family:'Glacial Indifference',sans-serif;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;transition:all .3s}
+.btn-pl:hover{opacity:.85;transform:translateY(-2px)}
+.btn-sl{display:inline-flex;align-items:center;gap:.5rem;border:1.5px solid rgba(250,246,239,.4);color:var(--beige);padding:.9rem 2.2rem;font-family:'Glacial Indifference',sans-serif;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;transition:all .3s;background:transparent}
+.btn-sl:hover{border-color:var(--beige);background:rgba(250,246,239,.08);transform:translateY(-2px)}
+section{padding:8rem 4rem}
+.divider{width:60px;height:1px;background:linear-gradient(to right,var(--brun-l),transparent);margin-bottom:1.5rem}
+.s-header{display:flex;align-items:flex-end;gap:2rem;margin-bottom:4rem}
+.s-label{font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;color:var(--brun);writing-mode:vertical-lr;transform:rotate(180deg);padding-bottom:.5rem;border-bottom:1px solid var(--brun-l)}
+.s-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,4vw,3.5rem);font-weight:300;color:var(--noir);line-height:1.1}
+.s-title em{font-style:italic;color:var(--brun)}
+#services{background:var(--beige)}
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5px;background:var(--beige3)}
+.svc{background:var(--beige);padding:3rem 2.5rem;position:relative;overflow:hidden;transition:background .4s}
+.svc::before{content:'';position:absolute;bottom:0;left:0;height:2px;width:0;background:var(--brun);transition:width .5s}
+.svc:hover{background:#F5EFE4}
+.svc:hover::before{width:100%}
+.svc-num{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:300;color:rgba(122,92,58,.15);line-height:1;margin-bottom:1rem}
+.svc-name{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:var(--noir);margin-bottom:.8rem}
+.svc-desc{font-size:.84rem;color:var(--muted);line-height:1.85;letter-spacing:.02em}
+.svc-link{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.5rem;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brun-d);text-decoration:none;transition:color .3s,gap .3s}
+.svc-link:hover{color:var(--brun);gap:.7rem}
+
+/* PACKS */
+#packs{padding:8rem 4rem;background:var(--beige2)}
+.packs-cat{margin-bottom:4rem;scroll-margin-top:6rem}
+.packs-cat:last-child{margin-bottom:0}
+.packs-cat-title{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:400;color:var(--noir);margin-bottom:.4rem}
+.packs-cat-title em{font-style:italic;color:var(--brun)}
+.packs-cat-sub{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brun);margin-bottom:2rem}
+.packs-grid{display:grid;gap:1.5px;background:var(--beige3)}
+.packs-grid.cols-4{grid-template-columns:repeat(4,1fr)}
+.packs-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.pack{background:var(--beige);padding:2.2rem 1.8rem;position:relative;overflow:hidden;transition:background .4s;display:flex;flex-direction:column}
+.pack::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:var(--brun);transform:scaleX(0);transform-origin:left;transition:transform .5s}
+.pack:hover{background:#F5EFE4}
+.pack:hover::before{transform:scaleX(1)}
+.pack-nom{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:400;color:var(--noir);margin-bottom:.3rem}
+.pack-slogan{font-style:italic;font-size:.82rem;color:var(--brun);margin-bottom:1.2rem;font-family:'Cormorant Garamond',serif}
+.pack-desc{font-size:.8rem;color:var(--muted);line-height:1.75;letter-spacing:.01em;flex:1}
+.pack-desc ul{list-style:none;margin:0;padding:0}
+.pack-desc li{position:relative;padding-left:1rem;margin-bottom:.7rem}
+.pack-desc li::before{content:'—';position:absolute;left:0;color:var(--brun-l)}
+.pack-desc li small{display:block;font-style:italic;color:rgba(107,85,68,.7);font-size:.74rem;margin-top:.15rem}
+.pack-cta{margin-top:1.5rem;display:inline-flex;align-items:center;gap:.4rem;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brun-d);text-decoration:none;transition:color .3s,gap .3s}
+.pack-cta:hover{color:var(--brun);gap:.7rem}
+
+/* PAGE PACKS DÉDIÉE */
+.packs-hero{background:var(--beige2);padding:9rem 4rem 4rem;border-bottom:1px solid var(--beige3)}
+.packs-hero-inner{max-width:900px}
+.packs-retour{display:inline-flex;align-items:center;gap:.5rem;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--brun);text-decoration:none;margin-bottom:2.5rem;transition:gap .3s,color .3s}
+.packs-retour:hover{gap:.8rem;color:var(--brun-d)}
+.packs-hero-eyebrow{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--brun);margin-bottom:1rem}
+.packs-hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,6vw,5rem);font-weight:300;line-height:1.05;color:var(--noir);margin-bottom:1.2rem}
+.packs-hero-title em{font-style:italic;color:var(--brun)}
+.packs-hero-sub{font-size:.95rem;color:var(--muted);max-width:480px;letter-spacing:.02em}
+.packs-section{padding:5rem 4rem 8rem;background:var(--beige)}
+.packs-bottom-cta{text-align:center;margin-top:5rem;padding-top:4rem;border-top:1px solid var(--beige3)}
+.packs-bottom-cta p{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-style:italic;color:var(--noir);margin-bottom:1.5rem}
+#about{padding:8rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;background:var(--beige)}
+.about-frame{width:100%;aspect-ratio:3/4;background:var(--beige3);border:1px solid rgba(122,92,58,.2);position:relative;overflow:hidden}
+.about-frame img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.about-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem}
+.about-ph svg{opacity:.4}
+.about-ph p{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);opacity:.6}
+.about-corner{position:absolute;bottom:-1.5rem;right:-1.5rem;width:120px;height:120px;border-right:1px solid rgba(122,92,58,.3);border-bottom:1px solid rgba(122,92,58,.3)}
+.about-tag{position:absolute;top:2rem;left:-1rem;background:var(--brun);color:var(--beige);padding:.5rem 1.2rem;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase}
+.about-lead{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:400;line-height:1.9;color:var(--text);margin-bottom:2rem;font-style:italic}
+#portfolio{padding:8rem 4rem;background:var(--beige)}
+.galerie-apercu{display:grid;grid-template-columns:1.4fr 1fr 1fr;grid-template-rows:280px 220px;gap:5px;margin-top:3rem}
+.galerie-apercu .gal-item{position:relative;overflow:hidden;cursor:pointer;background:var(--beige3)}
+.galerie-apercu .gal-item:first-child{grid-row:1/3}
+.galerie-apercu .gal-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .55s ease}
+.galerie-apercu .gal-item:hover img{transform:scale(1.06)}
+.gal-hover{position:absolute;inset:0;background:rgba(26,20,16,0);transition:background .35s}
+.gal-item:hover .gal-hover{background:rgba(26,20,16,.2)}
+.gal-voir-ov{position:absolute;inset:0;background:rgba(26,20,16,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;cursor:pointer;transition:background .3s}
+.gal-voir-ov:hover{background:rgba(26,20,16,.72)}
+.gal-voir-ov span{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--beige);letter-spacing:.06em}
+.gal-voir-ov small{font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(250,246,239,.6)}
+.gal-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;opacity:.35;text-align:center;padding:1rem}
+.port-cta{display:flex;align-items:center;gap:1.5rem;margin-top:2rem}
+.port-count{font-size:.72rem;color:var(--muted);letter-spacing:.08em}
+#gal-modal{display:none;position:fixed;inset:0;z-index:700;background:rgba(8,7,6,.97);flex-direction:column}
+#gal-modal.open{display:flex}
+.gal-modal-header{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 2.5rem;border-bottom:1px solid rgba(201,169,110,.1);flex-shrink:0}
+.gal-modal-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:300;color:rgba(250,246,239,.7);letter-spacing:.06em}
+.gal-modal-count{font-size:.7rem;color:rgba(250,246,239,.3);letter-spacing:.12em;text-transform:uppercase}
+.gal-modal-close{background:none;border:none;color:rgba(250,246,239,.4);font-size:1.8rem;cursor:pointer;line-height:1;transition:color .3s;padding:.2rem}
+.gal-modal-close:hover{color:var(--beige)}
+.gal-modal-grid{columns:3;column-gap:5px;overflow-y:auto;padding:5px;flex:1}
+.gal-modal-grid img{width:100%;display:block;margin-bottom:5px;cursor:pointer;transition:opacity .3s}
+.gal-modal-grid img:hover{opacity:.8}.port-cta{text-align:center;margin-top:3rem}
+.lb{display:none;position:fixed;inset:0;z-index:600;background:rgba(10,8,6,.95);align-items:center;justify-content:center}
+.lb.open{display:flex}
+.lb img{max-width:90vw;max-height:90vh;object-fit:contain}
+.lb-close{position:absolute;top:1.5rem;right:2rem;font-size:2rem;color:rgba(250,246,239,.6);background:none;border:none;cursor:pointer;transition:color .3s;line-height:1}
+.lb-close:hover{color:var(--beige)}
+.lb-prev,.lb-next{position:absolute;top:50%;transform:translateY(-50%);font-size:2.5rem;color:rgba(250,246,239,.5);background:none;border:none;cursor:pointer;padding:1rem;transition:color .3s}
+.lb-prev{left:.5rem}.lb-next{right:.5rem}
+.lb-prev:hover,.lb-next:hover{color:var(--beige)}
+#avis{padding:8rem 4rem;background:var(--beige)}
+.avis-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem;margin-top:3rem}
+.avis-card{padding:2rem;border:1px solid rgba(122,92,58,.15);position:relative;transition:border-color .3s;background:var(--beige)}
+.avis-card:hover{border-color:rgba(122,92,58,.35)}
+.avis-card::before{content:'\201C';position:absolute;top:-.5rem;left:1.5rem;font-family:'Cormorant Garamond',serif;font-size:5rem;line-height:1;color:var(--brun);opacity:.18}
+.avis-text{font-size:.84rem;color:var(--muted);line-height:1.85;font-style:italic;margin-bottom:1.5rem;letter-spacing:.02em}
+.avis-author{display:flex;align-items:center;gap:.8rem}
+.avis-dot{width:32px;height:32px;border-radius:50%;background:rgba(122,92,58,.12);border:1px solid rgba(122,92,58,.3);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:.9rem;color:var(--brun)}
+.avis-name{font-size:.8rem;letter-spacing:.08em;color:var(--noir)}
+.avis-role{font-size:.7rem;color:var(--muted)}
+#cta{padding:8rem 4rem;background:var(--noir);text-align:center;position:relative;overflow:hidden}
+#cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(122,92,58,.15) 0%,transparent 70%)}
+.cta-eyebrow{font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;color:var(--brun-l);margin-bottom:1.5rem}
+.cta-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5vw,5rem);font-weight:300;color:var(--beige);line-height:1.1;max-width:700px;margin:0 auto 1.5rem}
+.cta-title em{font-style:italic;color:var(--brun-l)}
+.cta-sub{font-size:.9rem;color:rgba(250,246,239,.6);margin-bottom:2.5rem;letter-spacing:.03em}
+.cta-btns{display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap}
+footer{padding:3rem 4rem;background:var(--noir2);border-top:1px solid rgba(122,92,58,.2);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.foot-logo img{height:55px;width:auto;display:block;filter:brightness(0) invert(1)}
+.foot-links{display:flex;gap:1.5rem;list-style:none}
+.foot-links a{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(250,246,239,.45);text-decoration:none;transition:color .3s}
+.foot-links a:hover{color:var(--beige)}
+.foot-copy{font-size:.66rem;color:rgba(250,246,239,.3)}
+.modal-bg{display:none;position:fixed;inset:0;z-index:500;background:rgba(26,20,16,.6);align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-bg.open{display:flex}
+.modal-box{background:var(--beige);max-width:640px;width:90%;max-height:85vh;overflow-y:auto;padding:3rem;position:relative}
+.modal-close{position:absolute;top:1rem;right:1.2rem;font-size:1.6rem;color:var(--muted);background:none;border:none;cursor:pointer;line-height:1;transition:color .3s}
+.modal-close:hover{color:var(--noir)}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--noir);margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--beige3)}
+.modal-content h3{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brun);margin:1.5rem 0 .6rem}
+.modal-content p{font-size:.86rem;color:var(--muted);line-height:1.85}
+.modal-content strong{color:var(--noir);font-weight:400}
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:400;background:var(--beige);border-top:1px solid var(--beige3);padding:1.2rem 4rem;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;box-shadow:0 -4px 20px rgba(26,20,16,.08);transition:transform .4s}
+#cookie-banner.hidden{transform:translateY(110%)}
+.cookie-text{display:flex;align-items:center;gap:.8rem;font-size:.8rem;color:var(--muted);line-height:1.6;flex:1}
+.cookie-btns{display:flex;gap:.8rem}
+.cookie-accept{background:var(--brun);color:var(--beige);border:none;padding:.55rem 1.4rem;font-family:'Glacial Indifference',sans-serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.cookie-accept:hover{background:var(--brun-d)}
+.cookie-refuse{background:transparent;color:var(--muted);border:1px solid rgba(122,92,58,.25);padding:.55rem 1.4rem;font-family:'Glacial Indifference',sans-serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.cookie-refuse:hover{border-color:var(--brun);color:var(--brun)}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* ADMIN — masqué par défaut, affiché uniquement si localhost */
+#admin-btn{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;width:44px;height:44px;border-radius:50%;background:var(--brun);color:var(--beige);border:none;cursor:pointer;display:none;align-items:center;justify-content:center;opacity:.4;transition:opacity .3s;font-size:1.1rem}
+#admin-btn:hover{opacity:1}
+#admin-overlay{display:none;position:fixed;inset:0;z-index:800;background:rgba(10,8,6,.6);backdrop-filter:blur(6px)}
+#admin-overlay.open{display:block}
+#admin-panel{position:fixed;top:0;right:-520px;bottom:0;width:510px;z-index:900;background:#1C1A17;color:#E8E2D8;overflow-y:auto;transition:right .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+#admin-panel.open{right:0}
+.adm-header{padding:1.8rem 2rem;border-bottom:1px solid rgba(201,169,110,.15);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:#141210}
+.adm-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:#E8D5A8}
+.adm-title span{font-family:'Glacial Indifference',sans-serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,169,110,.5);display:block;margin-top:.2rem}
+.adm-close{background:none;border:none;color:rgba(232,226,216,.4);font-size:1.4rem;cursor:pointer;line-height:1;transition:color .3s}
+.adm-close:hover{color:#E8D5A8}
+.adm-tabs{display:flex;border-bottom:1px solid rgba(201,169,110,.12);flex-shrink:0;background:#141210}
+.adm-tab{flex:1;padding:.8rem .5rem;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;background:none;border:none;color:rgba(232,226,216,.35);cursor:pointer;transition:all .3s;border-bottom:2px solid transparent}
+.adm-tab.active{color:#C9A96E;border-bottom-color:#C9A96E}
+.adm-tab:hover:not(.active){color:rgba(232,226,216,.7)}
+.adm-body{flex:1;overflow-y:auto;padding:1.5rem 2rem}
+#adm-login{padding:2.5rem 2rem}
+.adm-login-icon{font-size:2.5rem;text-align:center;margin-bottom:1.5rem;opacity:.4}
+.adm-login-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#E8D5A8;text-align:center;margin-bottom:.5rem}
+.adm-login-sub{font-size:.75rem;color:rgba(232,226,216,.4);text-align:center;margin-bottom:2rem;letter-spacing:.06em}
+.adm-field{margin-bottom:1rem}
+.adm-field label{display:block;font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(201,169,110,.7);margin-bottom:.4rem}
+.adm-field input,.adm-field textarea{width:100%;background:#0E0D0C;border:1px solid rgba(201,169,110,.15);color:#E8E2D8;padding:.7rem 1rem;font-family:'Glacial Indifference',sans-serif;font-size:.82rem;outline:none;transition:border-color .3s;resize:vertical}
+.adm-field input:focus,.adm-field textarea:focus{border-color:rgba(201,169,110,.4)}
+.adm-field textarea{min-height:90px}
+.adm-login-err{font-size:.75rem;color:#C97070;text-align:center;margin-top:.5rem;min-height:1.2em}
+.adm-btn{width:100%;padding:.8rem;background:#C9A96E;color:#1A1410;border:none;font-family:'Glacial Indifference',sans-serif;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:.5rem}
+.adm-btn:hover{background:#E8D5A8}
+.adm-btn-secondary{background:transparent;border:1px solid rgba(201,169,110,.3);color:#C9A96E}
+.adm-btn-secondary:hover{background:rgba(201,169,110,.08)}
+.adm-btn-danger{background:#7A3030;color:#F5C5C5;border:none}
+.adm-btn-danger:hover{background:#9A3A3A}
+.adm-section{margin-bottom:2rem}
+.adm-section-title{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,169,110,.6);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid rgba(201,169,110,.1)}
+.adm-save-bar{padding:1rem 2rem;border-top:1px solid rgba(201,169,110,.12);background:#141210;display:flex;gap:.8rem;flex-shrink:0}
+.adm-save-bar .adm-btn{margin-top:0}
+.adm-save-msg{font-size:.72rem;color:#7ABF7A;display:flex;align-items:center;gap:.4rem;opacity:0;transition:opacity .3s}
+.adm-save-msg.show{opacity:1}
+.adm-gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:1rem}
+.adm-gal-item{position:relative;aspect-ratio:1/1;overflow:hidden;background:#0E0D0C;border:1px solid rgba(201,169,110,.1)}
+.adm-gal-item img{width:100%;height:100%;object-fit:cover;display:block}
+.adm-gal-del{position:absolute;top:3px;right:3px;background:rgba(122,40,40,.85);color:#FFC5C5;border:none;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:background .3s}
+.adm-gal-del:hover{background:#7A2020}
+.adm-upload-zone{border:1px dashed rgba(201,169,110,.25);padding:1.5rem;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.adm-upload-zone:hover{border-color:rgba(201,169,110,.5);background:rgba(201,169,110,.04)}
+.adm-upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.adm-upload-zone p{font-size:.75rem;color:rgba(232,226,216,.4);letter-spacing:.06em}
+.adm-upload-zone strong{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(201,169,110,.6);display:block;margin-bottom:.4rem}
+.adm-avis-item{background:#0E0D0C;border:1px solid rgba(201,169,110,.1);padding:1rem;margin-bottom:.8rem}
+.adm-avis-item .adm-field{margin-bottom:.6rem}
+.adm-avis-actions{display:flex;gap:.5rem;margin-top:.8rem}
+.adm-avis-actions .adm-btn{width:auto;padding:.45rem .9rem;font-size:.62rem;margin-top:0}
+
+/* LOCAL BADGE — visible uniquement en local */
+#local-badge{position:fixed;top:1rem;right:1rem;z-index:200;background:#2C3E1A;color:#7ABF7A;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;padding:.3rem .7rem;border-radius:2px;display:none;align-items:center;gap:.4rem;font-family:'Glacial Indifference',sans-serif}
+
+@media(max-width:1100px) and (min-width:901px){
+  .packs-grid.cols-4{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  nav{padding:1rem 2rem}
+  .nav-links{display:none}
+  #hero{grid-template-columns:1fr;min-height:auto}
+  .hero-left{padding:7rem 2rem 3rem}
+  .hero-right{height:70vw}
+  .hero-right::after{background:linear-gradient(to bottom,var(--beige) 0%,transparent 20%)}
+  section,#about,#portfolio,#avis,#cta{padding:5rem 2rem}
+  .packs-hero{padding:7rem 2rem 3rem}
+  .packs-section{padding:3rem 2rem 5rem}
+  .packs-grid.cols-4,.packs-grid.cols-3{grid-template-columns:1fr}
+  .svc-grid,#about,.avis-grid{grid-template-columns:1fr}
+  #about{gap:3rem}
+  .galerie-apercu{grid-template-columns:1fr 1fr;grid-template-rows:200px 160px}
+  .galerie-apercu .gal-item:first-child{grid-row:auto}
+  .gal-modal-grid{columns:2}
+  footer{padding:2rem;flex-direction:column;text-align:center}
+  #cookie-banner{flex-direction:column;padding:1.2rem 2rem;text-align:center}
+  #admin-panel{width:100%;right:-100%}
+}
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="#" class="nav-logo"><img src="logo.png" alt="Dahlia Communication"></a>
+  <ul class="nav-links">
+    <li><a href="#about">Qui suis-je</a></li>
+    <li><a href="#services">Prestations</a></li>
+    <li><a href="#packs" id="nav-packs">Packs</a></li>
+    <li><a href="#portfolio">Shootings</a></li>
+    <li><a href="#avis">Avis</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Prendre contact</a>
+</nav>
+
+<!-- ========== PAGE ACCUEIL ========== -->
+<div id="page-home">
+
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow" id="txt-eyebrow">Photographe · Créatrice de contenu · Community Manager</p>
+    <h1 class="hero-title">La mise en lumière<br>qu'il te <em>faut.</em></h1>
+    <p class="hero-sub" id="txt-hero-sub">Je crée une safe place pour que tu puisses rayonner pleinement et te créer des souvenirs inoubliables.</p>
+    <div class="hero-actions">
+      <a href="#services" class="btn-p">Découvrir mes prestations <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="#portfolio" class="btn-s">Voir mon portfolio</a>
+    </div>
+    <div class="hero-scroll">Défiler</div>
+  </div>
+  <div class="hero-right">
+    <img src="Dahlia.jpg" alt="Dahlia" id="img-hero">
+  </div>
+</section>
+
+<section id="services">
+  <div class="s-header reveal">
+    <span class="s-label">Prestations</span>
+    <div><div class="divider"></div><h2 class="s-title">Ce que je<br>te <em>propose</em></h2></div>
+  </div>
+  <div class="svc-grid">
+    <div class="svc reveal d1">
+      <div class="svc-num">01</div>
+      <h3 class="svc-name" id="txt-svc1-titre">Photographie</h3>
+      <p class="svc-desc" id="txt-svc1-desc">Portraits personnels, familiaux, professionnels, shooting produit, couverture d'événement et direction artistique.</p>
+      <a href="#packs" class="svc-link" data-pack="packs-photo">Voir les packs photo <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6H11M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <div class="svc reveal d2">
+      <div class="svc-num">02</div>
+      <h3 class="svc-name" id="txt-svc2-titre">Création de contenu &amp; Community Management</h3>
+      <p class="svc-desc" id="txt-svc2-desc">Élaboration d'une stratégie marketing &amp; communication, création de contenu photo &amp; vidéos, gestion des réseaux sociaux et analyse des performances.</p>
+      <a href="#packs" class="svc-link" data-pack="packs-communication">Voir les packs communication <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6H11M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="about-wrap reveal">
+    <div class="about-frame">
+      <div class="about-ph">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="18" r="8" stroke="#7A5C3A" stroke-width="1.5"/><path d="M8 40c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#7A5C3A" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <p>Ta photo ici</p>
+      </div>
+    </div>
+    <div class="about-tag">À propos</div>
+    <div class="about-corner"></div>
+  </div>
+  <div class="reveal d2">
+    <div class="divider"></div>
+    <h2 class="s-title" style="margin-bottom:1.5rem">Qui<br><em>suis-je ?</em></h2>
+    <p class="about-lead" id="txt-about">« Forte de plusieurs années d'études et titulaire de deux diplômes dans le domaine de la communication et de la création de contenu, je me suis ensuite formée en autodidacte à la photographie, réunissant ainsi mes deux passions.<br><br>Aujourd'hui, en tant que photographe et community manager, j'allie deux expertises complémentaires qui me permettent d'accompagner à la fois les particuliers en quête de souvenirs mémorables mais aussi les professionnels qui souhaitent une communication visuelle cohérente et impactante.<br><br>Je capture avec sensibilité les moments et les histoires qui te définissent, et je valorise ton image grâce à des stratégies et des contenus pensés sur mesure pour ton projet.<br><br>La bienveillance, l'ouverture d'esprit, la créativité et l'écoute sont des valeurs indispensables à l'exercice de ma profession, et c'est autour de celles-ci que se construisent mes accompagnements. »</p>
+    <a href="#cta" class="btn-p" style="margin-top:2rem">Travailler avec moi</a>
+  </div>
+</section>
+
+<section id="portfolio">
+  <div class="s-header reveal">
+    <span class="s-label">Portfolio</span>
+    <div><div class="divider"></div><h2 class="s-title">Mes<br><em>shootings</em></h2></div>
+  </div>
+  <div class="galerie-apercu reveal" id="galerie"></div>
+  <div class="port-cta reveal">
+    <a href="#cta" class="btn-s">Me contacter <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <span class="port-count" id="port-count"></span>
+  </div>
+</section>
+
+<!-- MODALE GALERIE COMPLÈTE -->
+<div id="gal-modal">
+  <div class="gal-modal-header">
+    <span class="gal-modal-title">Portfolio — Tous les shootings</span>
+    <span class="gal-modal-count" id="gal-modal-count"></span>
+    <button class="gal-modal-close" id="gal-modal-close">&#215;</button>
+  </div>
+  <div class="gal-modal-grid" id="gal-modal-grid"></div>
+</div>
+
+<section id="avis">
+  <div class="s-header reveal">
+    <span class="s-label">Avis</span>
+    <div><div class="divider"></div><h2 class="s-title">Ils m'ont laissé<br>leurs <em>avis</em></h2></div>
+  </div>
+  <div class="avis-grid" id="avis-grid"></div>
+</section>
+
+<section id="cta">
+  <p class="cta-eyebrow reveal">Prête à te lancer ?</p>
+  <h2 class="cta-title reveal d1">Donnons vie à ton<br><em>projet ensemble</em></h2>
+  <p class="cta-sub reveal d2">Un projet, une question, une envie de collaboration — je suis à l'écoute.</p>
+  <div class="cta-btns reveal d3">
+    <a href="#" id="btn-mail" class="btn-pl">Envoyer un message <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a href="https://instagram.com" class="btn-sl"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="1.5" width="11" height="11" rx="3" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="7" r="2.5" stroke="currentColor" stroke-width="1.2"/><circle cx="10.5" cy="3.5" r="0.5" fill="currentColor"/></svg> Me suivre sur Instagram</a>
+  </div>
+</section>
+
+</div><!-- /page-home -->
+
+<!-- ========== PAGE PACKS ========== -->
+<div id="page-packs" style="display:none">
+  <div class="packs-hero">
+    <div class="packs-hero-inner">
+      <a href="#" class="packs-retour" id="packs-retour">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M11.5 6.5H1.5M5.5 2.5l-4 4 4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Retour à l'accueil
+      </a>
+      <p class="packs-hero-eyebrow">Formules sur mesure</p>
+      <h1 class="packs-hero-title">Mes <em>packs</em></h1>
+      <p class="packs-hero-sub">Des formules pensées pour chaque besoin — du shooting créatif à l'accompagnement communication complet.</p>
+    </div>
+  </div>
+
+  <section class="packs-section">
+    <!-- PACKS PHOTO -->
+    <div class="packs-cat" id="packs-photo">
+      <h3 class="packs-cat-title">Les packs <em>photo</em></h3>
+      <p class="packs-cat-sub">Shootings sur mesure</p>
+      <div class="packs-grid cols-4" id="grid-packs-photo"></div>
+    </div>
+
+    <!-- PACKS COMMUNICATION -->
+    <div class="packs-cat" id="packs-communication">
+      <h3 class="packs-cat-title">Les packs <em>communication</em></h3>
+      <p class="packs-cat-sub">Stratégie &amp; contenu</p>
+      <div class="packs-grid cols-3" id="grid-packs-com"></div>
+    </div>
+
+    <div class="packs-bottom-cta">
+      <p>Une question sur une formule ? Un projet sur mesure ?</p>
+      <a href="#" class="btn-p go-contact">Me contacter <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7H12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </section>
+</div><!-- /page-packs -->
+
+<footer>
+  <span class="foot-logo"><img src="logo.png" alt="Dahlia Communication"></span>
+  <ul class="foot-links">
+    <li><a href="#" id="lnk-mentions">Mentions légales</a></li>
+    <li><a href="#" id="lnk-privacy">Politique de confidentialité</a></li>
+    <li><a href="#cta">Contact</a></li>
+  </ul>
+  <span class="foot-copy">2025 Dahlia Communication</span>
+</footer>
+
+<div id="modal-mentions" class="modal-bg">
+  <div class="modal-box">
+    <button class="modal-close" id="close-mentions">&#215;</button>
+    <h2 class="modal-title">Mentions légales</h2>
+    <div class="modal-content">
+      <h3>Identité de l'entreprise</h3>
+      <p><strong>DAHLIA COMMUNICATION</strong><br>Germain Alice (entrepreneur individuel)<br>SIRET : 980 800 700 00018<br>2 rue Auguste Lechesne, 14000 Caen — France<br>dahliaacommunication@gmail.com · +33 6 95 02 90 93<br>TVA non applicable, art. 293 B du CGI</p>
+      <h3>Hébergement</h3><p>À mettre à jour lors de la mise en ligne.</p>
+      <h3>Propriété intellectuelle</h3><p>L'ensemble du contenu est la propriété exclusive de Dahlia Communication. Toute reproduction est interdite sans autorisation.</p>
+    </div>
+  </div>
+</div>
+<div id="modal-privacy" class="modal-bg">
+  <div class="modal-box">
+    <button class="modal-close" id="close-privacy">&#215;</button>
+    <h2 class="modal-title">Politique de confidentialité</h2>
+    <div class="modal-content">
+      <h3>1. Collecte</h3><p>Nom, prénom, adresse e-mail uniquement lors du contact. Aucune autre donnée collectée.</p>
+      <h3>2. Utilisation</h3><p>Données utilisées uniquement pour répondre à votre demande. Non partagées avec des tiers.</p>
+      <h3>3. Conservation</h3><p>Données supprimées après traitement de la demande.</p>
+      <h3>4. Sécurité</h3><p>Mesures appropriées mises en place pour protéger vos données.</p>
+      <h3>5. Modifications</h3><p>Politique modifiable à tout moment avec publication sur cette page.</p>
+    </div>
+  </div>
+</div>
+
+<div class="lb" id="lb">
+  <button class="lb-close" id="lb-close">&#215;</button>
+  <button class="lb-prev" id="lb-prev">&#8249;</button>
+  <img id="lb-img" src="" alt="">
+  <button class="lb-next" id="lb-next">&#8250;</button>
+</div>
+
+<div id="cookie-banner">
+  <div class="cookie-text"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" stroke="#7A5C3A" stroke-width="1.2"/><path d="M9 8v4M9 6h.01" stroke="#7A5C3A" stroke-width="1.2" stroke-linecap="round"/></svg><span>Ce site utilise des cookies pour améliorer votre expérience.</span></div>
+  <div class="cookie-btns"><button class="cookie-accept" id="btn-accept">Accepter</button><button class="cookie-refuse" id="btn-refuse">Refuser</button></div>
+</div>
+
+<!-- ADMIN — injecté uniquement si localhost -->
+<div id="local-badge">&#9679; Mode local</div>
+<button id="admin-btn" title="Administration">&#9881;</button>
+<div id="admin-overlay"></div>
+<div id="admin-panel">
+  <div id="adm-login">
+    <div class="adm-login-icon">&#128272;</div>
+    <p class="adm-login-title">Espace Administration</p>
+    <p class="adm-login-sub">Dahlia Communication · Accès local uniquement</p>
+    <div class="adm-field"><label>Mot de passe</label><input type="password" id="adm-pwd-input" placeholder="••••••••"></div>
+    <p class="adm-login-err" id="adm-login-err"></p>
+    <button class="adm-btn" id="adm-login-btn">Accéder</button>
+  </div>
+  <div id="adm-main" style="display:none;flex-direction:column;flex:1">
+    <div class="adm-header">
+      <div class="adm-title">Administration<span>Dahlia Communication</span></div>
+      <button class="adm-close" id="adm-close-btn">&#215;</button>
+    </div>
+    <div class="adm-tabs">
+      <button class="adm-tab active" data-tab="textes">Textes</button>
+      <button class="adm-tab" data-tab="galerie">Galerie</button>
+      <button class="adm-tab" data-tab="packs">Packs</button>
+      <button class="adm-tab" data-tab="avis">Avis</button>
+      <button class="adm-tab" data-tab="reglages">Réglages</button>
+    </div>
+    <div class="adm-body" id="tab-textes">
+      <div class="adm-section">
+        <p class="adm-section-title">Hero — Section principale</p>
+        <div class="adm-field"><label>Sous-titre (petit texte en haut)</label><input type="text" id="adm-eyebrow"></div>
+        <div class="adm-field"><label>Phrase d'accroche</label><textarea id="adm-hero-sub"></textarea></div>
+      </div>
+      <div class="adm-section">
+        <p class="adm-section-title">Prestations</p>
+        <div class="adm-field"><label>Titre prestation 1</label><input type="text" id="adm-svc1-titre"></div>
+        <div class="adm-field"><label>Description prestation 1</label><textarea id="adm-svc1-desc"></textarea></div>
+        <div class="adm-field"><label>Titre prestation 2</label><input type="text" id="adm-svc2-titre"></div>
+        <div class="adm-field"><label>Description prestation 2</label><textarea id="adm-svc2-desc"></textarea></div>
+      </div>
+      <div class="adm-section">
+        <p class="adm-section-title">Qui suis-je ?</p>
+        <div class="adm-field"><label>Texte de présentation</label><textarea id="adm-about" style="min-height:180px"></textarea></div>
+      </div>
+    </div>
+    <div class="adm-body" id="tab-galerie" style="display:none">
+      <div class="adm-section">
+        <p class="adm-section-title">Photos du portfolio</p>
+        <p style="font-size:.75rem;color:rgba(232,226,216,.4);margin-bottom:1rem;line-height:1.7">Ajoute tes photos en cliquant ci-dessous. Plusieurs photos à la fois possibles.</p>
+        <div class="adm-upload-zone">
+          <input type="file" id="adm-file-input" accept="image/*" multiple>
+          <strong>Cliquer pour ajouter des photos</strong>
+          <p>JPG, PNG, WEBP — Plusieurs à la fois</p>
+        </div>
+      </div>
+      <div class="adm-section">
+        <p class="adm-section-title">Photos actuelles <span id="gal-count" style="color:rgba(201,169,110,.6)"></span></p>
+        <div class="adm-gallery-grid" id="adm-gal-grid"></div>
+        <button class="adm-btn adm-btn-danger" id="adm-clear-gal" style="margin-top:.5rem;font-size:.62rem">Vider toute la galerie</button>
+      </div>
+    </div>
+    <div class="adm-body" id="tab-packs" style="display:none">
+      <div class="adm-section">
+        <p class="adm-section-title">Packs photo</p>
+        <div id="adm-packs-photo-list"></div>
+        <button class="adm-btn adm-btn-secondary" id="adm-add-pack-photo" style="margin-top:.5rem">+ Ajouter un pack photo</button>
+      </div>
+      <div class="adm-section">
+        <p class="adm-section-title">Packs communication</p>
+        <div id="adm-packs-com-list"></div>
+        <button class="adm-btn adm-btn-secondary" id="adm-add-pack-com" style="margin-top:.5rem">+ Ajouter un pack communication</button>
+      </div>
+      <p style="font-size:.72rem;color:rgba(232,226,216,.35);line-height:1.7;margin-top:1rem">Astuce : pour une liste à puces dans la description, mets chaque élément sur une nouvelle ligne (touche Entrée).</p>
+    </div>
+    <div class="adm-body" id="tab-avis" style="display:none">
+      <div class="adm-section">
+        <p class="adm-section-title">Gérer les avis clients</p>
+        <div id="adm-avis-list"></div>
+        <button class="adm-btn adm-btn-secondary" id="adm-add-avis" style="margin-top:.5rem">+ Ajouter un avis</button>
+      </div>
+    </div>
+    <div class="adm-body" id="tab-reglages" style="display:none">
+      <div class="adm-section">
+        <p class="adm-section-title">Changer le mot de passe</p>
+        <div class="adm-field"><label>Nouveau mot de passe</label><input type="password" id="adm-new-pwd"></div>
+        <div class="adm-field"><label>Confirmer</label><input type="password" id="adm-new-pwd2"></div>
+        <button class="adm-btn" id="adm-save-pwd">Changer le mot de passe</button>
+        <p id="adm-pwd-msg" style="font-size:.72rem;margin-top:.5rem;min-height:1em"></p>
+      </div>
+      <div class="adm-section">
+        <p class="adm-section-title">Session</p>
+        <button class="adm-btn adm-btn-secondary" id="adm-logout">Se déconnecter</button>
+      </div>
+    </div>
+    <div class="adm-save-bar" id="adm-save-bar" style="display:none">
+      <button class="adm-btn" id="adm-save-btn" style="flex:1">Sauvegarder</button>
+      <span class="adm-save-msg" id="adm-save-msg">&#10003; Sauvegardé !</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== PROTECTION LOCALE ===== */
+var isLocal = (
+  location.hostname === 'localhost' ||
+  location.hostname === '127.0.0.1' ||
+  location.hostname === '' ||
+  location.hostname === '::1'
+);
+
+if (!isLocal) {
+  /* Hors local : on supprime physiquement tout le panneau admin du DOM */
+  ['admin-btn','admin-overlay','admin-panel','local-badge'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && el.parentNode) el.parentNode.removeChild(el);
+  });
+} else {
+  /* En local : on affiche le bouton et le badge */
+  document.getElementById('admin-btn').style.display = 'flex';
+  document.getElementById('local-badge').style.display = 'flex';
+}
+
+/* ===== DONNÉES ===== */
+var DEFAULTS = {
+  eyebrow: 'Photographe · Créatrice de contenu · Community Manager',
+  heroSub: "Je crée une safe place pour que tu puisses rayonner pleinement et te créer des souvenirs inoubliables.",
+  svc1Titre: 'Photographie',
+  svc1Desc: "Portraits personnels, familiaux, professionnels, shooting produit, couverture d'événement et direction artistique.",
+  svc2Titre: 'Création de contenu & Community Management',
+  svc2Desc: "Élaboration d'une stratégie marketing & communication, création de contenu photo & vidéos, gestion des réseaux sociaux et analyse des performances.",
+  about: "« Forte de plusieurs années d'études et titulaire de deux diplômes dans le domaine de la communication et de la création de contenu, je me suis ensuite formée en autodidacte à la photographie, réunissant ainsi mes deux passions.\n\nAujourd'hui, en tant que photographe et community manager, j'allie deux expertises complémentaires qui me permettent d'accompagner à la fois les particuliers en quête de souvenirs mémorables mais aussi les professionnels qui souhaitent une communication visuelle cohérente et impactante.\n\nJe capture avec sensibilité les moments et les histoires qui te définissent, et je valorise ton image grâce à des stratégies et des contenus pensés sur mesure pour ton projet.\n\nLa bienveillance, l'ouverture d'esprit, la créativité et l'écoute sont des valeurs indispensables à l'exercice de ma profession, et c'est autour de celles-ci que se construisent mes accompagnements. »",
+  gallery: [],
+  packsPhoto: [
+    {nom: "L'édito", slogan: "Sors de ta zone de confort", desc: "1h30 de shooting avec direction artistique incluse, en studio ou extérieur, seul ou à plusieurs, avec guide de préparation et moodboard fournis au préalable.", cta: "Réserver"},
+    {nom: "Le portrait", slogan: "Redécouvre-toi sous un autre angle", desc: "1h de shooting photo en studio, seul ou à plusieurs, avec un guide de préparation fourni en amont.", cta: "Réserver"},
+    {nom: "Le branding", slogan: "Promeus ton activité", desc: "2h de shooting pour mettre en avant ton activité, ta marque ou ton produit de manière pro et distinguée, avec guide de préparation en amont.", cta: "Réserver"},
+    {nom: "Les événements", slogan: "Immortalise tes plus beaux souvenirs", desc: "Tout type d'événement — mariage, cérémonie, célébration. Information & devis personnalisé sur demande.", cta: "Demander un devis"}
+  ],
+  packsCom: [
+    {nom: "Pack créa", slogan: "Donne vie à ton image de marque", desc: "Création de contenu — shooting photo professionnel (1h)\nCréation de vidéos professionnelles (1h de tournage) + montage", cta: "Réserver"},
+    {nom: "Pack réseaux", slogan: "Booste ta présence en ligne", desc: "Élaboration d'une stratégie de communication complète sur 6 mois\nGestion professionnelle d'un réseau social sur 6 mois", cta: "Réserver"},
+    {nom: "Pack full", slogan: "Passe un cap dans ta com'", desc: "Stratégie de communication complète sur 6 mois\nGestion professionnelle d'un réseau social sur 6 mois\nCréation de contenu — shooting photo pro (1h)\nVidéos professionnelles (1h de tournage) + montage", cta: "Réserver"}
+  ],
+  avis: [
+    {texte: "Merci infiniment pour ce moment incroyable passé ensemble. J'ai adoré, tu es vraiment adorable et tu fais un excellent travail. Grâce à toi, j'aurai de magnifiques photos.", nom: 'Elisa', role: 'Cliente · Shooting portrait'},
+    {texte: "Coucou Alice, waouhhhh tellement magnifiques les photos !!! Merci beaucoup.", nom: 'Emma', role: 'Cliente · Shooting photo'},
+    {texte: "Bonjour, on tenait à vous envoyer un message, ma sœur et moi, pour vous remercier pour cette séance. On a vraiment passé un superbe moment. Merci pour votre gentillesse et votre bonne humeur. Je reviendrai, c'est sûr !", nom: 'Léane', role: 'Cliente · Shooting en duo'},
+    {texte: "Des photos sublimes qui mettent vraiment en valeur nos produits. Dahlia comprend l'esthétique de notre marque et livre toujours au-delà de nos attentes.", nom: 'Marie L.', role: 'Fondatrice · Marque de mode'}
+  ],
+  password: 'dahlia2025'
+};
+
+function load(k){try{var v=localStorage.getItem('dahlia_'+k);return v?JSON.parse(v):null}catch(e){return null}}
+function save(k,v){try{localStorage.setItem('dahlia_'+k,JSON.stringify(v))}catch(e){}}
+function get(k){var v=load(k);return v!==null?v:DEFAULTS[k]}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+/* ===== INDEXEDDB POUR LA GALERIE ===== */
+var DB = null;
+function initDB(cb) {
+  if (DB) { cb(DB); return; }
+  var req = indexedDB.open('dahlia_gallery', 1);
+  req.onupgradeneeded = function(e) {
+    var db = e.target.result;
+    if (!db.objectStoreNames.contains('photos')) {
+      db.createObjectStore('photos', { keyPath: 'id', autoIncrement: true });
+    }
+  };
+  req.onsuccess = function(e) { DB = e.target.result; cb(DB); };
+  req.onerror = function() { console.error('IndexedDB non disponible'); cb(null); };
+}
+
+function dbGetAll(cb) {
+  initDB(function(db) {
+    if (!db) { cb([]); return; }
+    var tx = db.transaction('photos', 'readonly');
+    var store = tx.objectStore('photos');
+    var req = store.getAll();
+    req.onsuccess = function() { cb(req.result || []); };
+    req.onerror = function() { cb([]); };
+  });
+}
+
+function dbAdd(dataUrl, cb) {
+  initDB(function(db) {
+    if (!db) { cb && cb(); return; }
+    var tx = db.transaction('photos', 'readwrite');
+    var store = tx.objectStore('photos');
+    store.add({ src: dataUrl });
+    tx.oncomplete = function() { cb && cb(); };
+    tx.onerror = function() { cb && cb(); };
+  });
+}
+
+function dbDelete(id, cb) {
+  initDB(function(db) {
+    if (!db) { cb && cb(); return; }
+    var tx = db.transaction('photos', 'readwrite');
+    tx.objectStore('photos').delete(id);
+    tx.oncomplete = function() { cb && cb(); };
+  });
+}
+
+function dbClear(cb) {
+  initDB(function(db) {
+    if (!db) { cb && cb(); return; }
+    var tx = db.transaction('photos', 'readwrite');
+    tx.objectStore('photos').clear();
+    tx.oncomplete = function() { cb && cb(); };
+  });
+}
+
+/* ===== RENDER SITE ===== */
+function renderSite(){
+  setText('txt-eyebrow',get('eyebrow'));
+  setText('txt-hero-sub',get('heroSub'));
+  setText('txt-svc1-titre',get('svc1Titre'));
+  setText('txt-svc1-desc',get('svc1Desc'));
+  setText('txt-svc2-titre',get('svc2Titre'));
+  setText('txt-svc2-desc',get('svc2Desc'));
+  var aboutEl=document.getElementById('txt-about');
+  if(aboutEl)aboutEl.innerHTML=get('about').replace(/\n/g,'<br>');
+  renderGallery();
+  renderAvis();
+  renderPacks();
+}
+function setText(id,val){var el=document.getElementById(id);if(el)el.textContent=val}
+
+var lbImgs=[],lbIdx=0;
+
+function openGalModal(){
+  dbGetAll(function(rows){
+    var modal=document.getElementById('gal-modal');
+    var grid=document.getElementById('gal-modal-grid');
+    var countEl=document.getElementById('gal-modal-count');
+    if(countEl)countEl.textContent=rows.length+' photo'+(rows.length>1?'s':'');
+    grid.innerHTML='';
+    rows.forEach(function(row,i){
+      var img=document.createElement('img');
+      img.src=row.src;img.alt='';
+      img.addEventListener('click',function(){
+        lbIdx=i;lbImgs=rows.map(function(r){return r.src;});
+        document.getElementById('lb-img').src=row.src;
+        document.getElementById('lb').classList.add('open');
+        document.body.style.overflow='hidden';
+      });
+      grid.appendChild(img);
+    });
+    modal.classList.add('open');
+    document.body.style.overflow='hidden';
+  });
+}
+
+function closeGalModal(){
+  document.getElementById('gal-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function renderGallery(){
+  var grid=document.getElementById('galerie');
+  if(!grid)return;
+  dbGetAll(function(rows){
+    grid.innerHTML='';
+    lbImgs=rows.map(function(r){return r.src;});
+    var countEl=document.getElementById('port-count');
+
+    if(!rows.length){
+      grid.innerHTML='<div style="grid-column:1/-1;padding:3rem;text-align:center;color:rgba(107,85,68,.4);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase">Aucune photo — ajoutez-en via le panneau admin</div>';
+      if(countEl)countEl.textContent='';
+      return;
+    }
+
+    if(countEl)countEl.textContent=rows.length+' photo'+(rows.length>1?'s':'');
+
+    /* Affiche au max 5 photos en aperçu */
+    var preview=rows.slice(0,5);
+
+    preview.forEach(function(row,i){
+      var isLast=(i===preview.length-1)&&(rows.length>5)&&(i===4);
+      var div=document.createElement('div');div.className='gal-item';
+
+      if(isLast){
+        /* Dernière case = bouton "Voir tout" */
+        var img=document.createElement('img');img.src=row.src;img.alt='';
+        var ov=document.createElement('div');ov.className='gal-voir-ov';
+        ov.innerHTML='<span>Voir tout</span><small>'+rows.length+' photos</small>';
+        ov.addEventListener('click',openGalModal);
+        div.appendChild(img);div.appendChild(ov);
+      } else {
+        var img=document.createElement('img');img.src=row.src;img.alt='';
+        var hover=document.createElement('div');hover.className='gal-hover';
+        img.addEventListener('click',function(){
+          lbIdx=i;
+          document.getElementById('lb-img').src=row.src;
+          document.getElementById('lb').classList.add('open');
+          document.body.style.overflow='hidden';
+        });
+        div.appendChild(img);div.appendChild(hover);
+      }
+      grid.appendChild(div);
+    });
+
+    /* Si moins de 5 photos, remplir avec placeholders */
+    while(grid.children.length<5){
+      var ph=document.createElement('div');ph.className='gal-item';
+      ph.innerHTML='<div class="gal-ph">À venir</div>';
+      grid.appendChild(ph);
+    }
+
+    /* Bouton "Voir tout" si > 5 photos et pas encore affiché */
+    if(rows.length<=5&&rows.length>0){
+      /* Ajouter bouton voir tout séparé si exactement ≤5 photos */
+    }
+  });
+}
+
+function renderAvis(){
+  var list=get('avis');
+  var grid=document.getElementById('avis-grid');
+  if(!grid)return;
+  grid.innerHTML='';
+  list.forEach(function(a){
+    var card=document.createElement('div');card.className='avis-card reveal';
+    card.innerHTML='<p class="avis-text">"'+escHtml(a.texte)+'"</p><div class="avis-author"><div class="avis-dot">'+escHtml(a.nom.charAt(0))+'</div><div><p class="avis-name">'+escHtml(a.nom)+'</p><p class="avis-role">'+escHtml(a.role)+'</p></div></div>';
+    grid.appendChild(card);
+  });
+  setupReveal();
+}
+
+function renderPacks(){
+  renderPackGrid('grid-packs-photo', get('packsPhoto'));
+  renderPackGrid('grid-packs-com', get('packsCom'));
+}
+function renderPackGrid(gridId, list){
+  var grid=document.getElementById(gridId);
+  if(!grid)return;
+  grid.innerHTML='';
+  list.forEach(function(p){
+    var div=document.createElement('div');div.className='pack';
+    var descHtml;
+    /* Si la description contient des sauts de ligne → liste à puces */
+    if(p.desc.indexOf('\n')!==-1){
+      var lines=p.desc.split('\n').filter(function(l){return l.trim();});
+      descHtml='<ul>'+lines.map(function(l){return '<li>'+escHtml(l.trim())+'</li>';}).join('')+'</ul>';
+    } else {
+      descHtml=escHtml(p.desc);
+    }
+    div.innerHTML='<h4 class="pack-nom">'+escHtml(p.nom)+'</h4>'+
+      '<p class="pack-slogan">'+escHtml(p.slogan)+'</p>'+
+      '<div class="pack-desc">'+descHtml+'</div>'+
+      '<a href="#" class="pack-cta go-contact">'+escHtml(p.cta)+' <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1 5.5H10M6.5 2l3.5 3.5L6.5 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>';
+    grid.appendChild(div);
+  });
+  /* Réattacher les boutons go-contact */
+  grid.querySelectorAll('.go-contact').forEach(function(link){
+    link.addEventListener('click',function(e){
+      e.preventDefault();showHome();
+      setTimeout(function(){var cta=document.getElementById('cta');if(cta)cta.scrollIntoView({behavior:'smooth'});},50);
+    });
+  });
+}
+
+/* ===== NAV & REVEAL ===== */
+var nav=document.getElementById('navbar');
+window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>60);});
+function setupReveal(){
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll('.reveal:not(.visible)').forEach(function(el){obs.observe(el);});
+}
+
+/* ===== LIGHTBOX ===== */
+var lb=document.getElementById('lb');
+function closeLb(){lb.classList.remove('open');document.body.style.overflow='';}
+document.getElementById('lb-close').addEventListener('click',closeLb);
+document.getElementById('lb-prev').addEventListener('click',function(){lbIdx=(lbIdx-1+lbImgs.length)%lbImgs.length;document.getElementById('lb-img').src=lbImgs[lbIdx];});
+document.getElementById('lb-next').addEventListener('click',function(){lbIdx=(lbIdx+1)%lbImgs.length;document.getElementById('lb-img').src=lbImgs[lbIdx];});
+lb.addEventListener('click',function(e){if(e.target===lb)closeLb();});
+
+/* ===== MODAL GALERIE ===== */
+document.getElementById('gal-modal-close').addEventListener('click',closeGalModal);
+document.getElementById('gal-modal').addEventListener('click',function(e){
+  if(e.target===this)closeGalModal();
+});
+
+/* ===== MODALS ===== */
+function openModal(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+document.getElementById('lnk-mentions').addEventListener('click',function(e){e.preventDefault();openModal('modal-mentions');});
+document.getElementById('lnk-privacy').addEventListener('click',function(e){e.preventDefault();openModal('modal-privacy');});
+document.getElementById('close-mentions').addEventListener('click',function(){closeModal('modal-mentions');});
+document.getElementById('close-privacy').addEventListener('click',function(){closeModal('modal-privacy');});
+document.getElementById('modal-mentions').addEventListener('click',function(e){if(e.target===this)closeModal('modal-mentions');});
+document.getElementById('modal-privacy').addEventListener('click',function(e){if(e.target===this)closeModal('modal-privacy');});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){closeModal('modal-mentions');closeModal('modal-privacy');closeLb();closeGalModal();}
+  if(lb.classList.contains('open')){if(e.key==='ArrowLeft')document.getElementById('lb-prev').click();if(e.key==='ArrowRight')document.getElementById('lb-next').click();}
+});
+
+/* ===== COOKIES ===== */
+var banner=document.getElementById('cookie-banner');
+if(localStorage.getItem('dahlia-cookies'))banner.classList.add('hidden');
+document.getElementById('btn-accept').addEventListener('click',function(){localStorage.setItem('dahlia-cookies','accepted');banner.classList.add('hidden');});
+document.getElementById('btn-refuse').addEventListener('click',function(){localStorage.setItem('dahlia-cookies','refused');banner.classList.add('hidden');});
+
+/* ===== EMAIL ===== */
+document.getElementById('btn-mail').href='mai'+'lto:dahliaacommunication@gmail.com';
+
+/* ===== ADMIN ===== */
+if(isLocal){
+  var adminOpen=false;
+  function openAdmin(){adminOpen=true;document.getElementById('admin-panel').classList.add('open');document.getElementById('admin-overlay').classList.add('open');}
+  function closeAdmin(){adminOpen=false;document.getElementById('admin-panel').classList.remove('open');document.getElementById('admin-overlay').classList.remove('open');}
+  document.getElementById('admin-btn').addEventListener('click',openAdmin);
+  document.getElementById('admin-overlay').addEventListener('click',closeAdmin);
+  document.getElementById('adm-login-btn').addEventListener('click',doLogin);
+  document.getElementById('adm-pwd-input').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  function doLogin(){
+    var pwd=document.getElementById('adm-pwd-input').value;
+    var stored=load('password')||DEFAULTS.password;
+    if(pwd===stored){
+      document.getElementById('adm-login').style.display='none';
+      var main=document.getElementById('adm-main');main.style.display='flex';
+      document.getElementById('adm-pwd-input').value='';
+      loadAdminFields();
+    }else{
+      document.getElementById('adm-login-err').textContent='Mot de passe incorrect.';
+      setTimeout(function(){document.getElementById('adm-login-err').textContent='';},2500);
+    }
+  }
+  document.getElementById('adm-close-btn').addEventListener('click',closeAdmin);
+
+  document.querySelectorAll('.adm-tab').forEach(function(tab){
+    tab.addEventListener('click',function(){
+      document.querySelectorAll('.adm-tab').forEach(function(t){t.classList.remove('active');});
+      tab.classList.add('active');
+      var t=tab.dataset.tab;
+      document.getElementById('tab-textes').style.display=t==='textes'?'block':'none';
+      document.getElementById('tab-galerie').style.display=t==='galerie'?'block':'none';
+      document.getElementById('tab-packs').style.display=t==='packs'?'block':'none';
+      document.getElementById('tab-avis').style.display=t==='avis'?'block':'none';
+      document.getElementById('tab-reglages').style.display=t==='reglages'?'block':'none';
+      document.getElementById('adm-save-bar').style.display=(t==='textes'||t==='avis'||t==='packs')?'flex':'none';
+    });
+  });
+
+  function loadAdminFields(){
+    function setField(id,val){var el=document.getElementById(id);if(el)el.value=val;}
+    setField('adm-eyebrow',get('eyebrow'));
+    setField('adm-hero-sub',get('heroSub'));
+    setField('adm-svc1-titre',get('svc1Titre'));
+    setField('adm-svc1-desc',get('svc1Desc'));
+    setField('adm-svc2-titre',get('svc2Titre'));
+    setField('adm-svc2-desc',get('svc2Desc'));
+    setField('adm-about',get('about'));
+    renderAdmGallery();renderAdmAvis();renderAdmPacks();
+    document.getElementById('adm-save-bar').style.display='flex';
+  }
+
+  document.getElementById('adm-save-btn').addEventListener('click',function(){
+    save('eyebrow',document.getElementById('adm-eyebrow').value);
+    save('heroSub',document.getElementById('adm-hero-sub').value);
+    save('svc1Titre',document.getElementById('adm-svc1-titre').value);
+    save('svc1Desc',document.getElementById('adm-svc1-desc').value);
+    save('svc2Titre',document.getElementById('adm-svc2-titre').value);
+    save('svc2Desc',document.getElementById('adm-svc2-desc').value);
+    save('about',document.getElementById('adm-about').value);
+    saveAdmAvis();saveAdmPacks();renderSite();
+    var msg=document.getElementById('adm-save-msg');msg.classList.add('show');
+    setTimeout(function(){msg.classList.remove('show');},2500);
+  });
+
+  document.getElementById('adm-file-input').addEventListener('change',function(e){
+    var files=Array.from(e.target.files);
+    if(!files.length)return;
+
+    /* Afficher un indicateur de chargement */
+    var uploadZone=document.querySelector('.adm-upload-zone strong');
+    var origText=uploadZone?uploadZone.textContent:'';
+    if(uploadZone)uploadZone.textContent='Chargement de '+files.length+' photo'+(files.length>1?'s':'')+'...';
+
+    var done=0;
+    var total=files.length;
+
+    function oneDone(){
+      done++;
+      if(uploadZone)uploadZone.textContent='Chargement '+done+'/'+total+'...';
+      if(done===total){
+        if(uploadZone)uploadZone.textContent=origText;
+        renderAdmGallery();
+        renderGallery();
+      }
+    }
+
+    files.forEach(function(file){
+      var reader=new FileReader();
+      reader.onload=function(ev){
+        dbAdd(ev.target.result,function(){ oneDone(); });
+      };
+      reader.onerror=function(){ oneDone(); };
+      reader.readAsDataURL(file);
+    });
+    e.target.value='';
+  });
+
+  function renderAdmGallery(){
+    dbGetAll(function(rows){
+      var countEl=document.getElementById('gal-count');
+      if(countEl)countEl.textContent='('+rows.length+' photo'+(rows.length>1?'s':'')+')';
+      var grid=document.getElementById('adm-gal-grid');if(!grid)return;
+      grid.innerHTML='';
+      if(!rows.length){
+        grid.innerHTML='<p style="font-size:.75rem;color:rgba(232,226,216,.3);grid-column:1/-1;text-align:center;padding:1rem">Aucune photo</p>';
+        return;
+      }
+      rows.forEach(function(row){
+        var div=document.createElement('div');div.className='adm-gal-item';
+        var img=document.createElement('img');img.src=row.src;img.alt='';
+        var del=document.createElement('button');del.className='adm-gal-del';del.innerHTML='&#215;';del.title='Supprimer';
+        del.addEventListener('click',function(){
+          if(confirm('Supprimer cette photo ?')){
+            dbDelete(row.id,function(){ renderAdmGallery(); renderGallery(); });
+          }
+        });
+        div.appendChild(img);div.appendChild(del);grid.appendChild(div);
+      });
+    });
+  }
+
+  document.getElementById('adm-clear-gal').addEventListener('click',function(){
+    if(confirm('Vider toute la galerie ? Cette action est irréversible.')){
+      dbClear(function(){ renderAdmGallery(); renderGallery(); });
+    }
+  });
+
+  function renderAdmAvis(){
+    var list=get('avis');var container=document.getElementById('adm-avis-list');container.innerHTML='';
+    list.forEach(function(a,i){
+      var div=document.createElement('div');div.className='adm-avis-item';
+      div.innerHTML='<div class="adm-field"><label>Texte</label><textarea class="avis-txt-'+i+'">'+escHtml(a.texte)+'</textarea></div>'+
+        '<div class="adm-field"><label>Nom</label><input class="avis-nom-'+i+'" value="'+escHtml(a.nom)+'"></div>'+
+        '<div class="adm-field"><label>Rôle</label><input class="avis-role-'+i+'" value="'+escHtml(a.role)+'"></div>'+
+        '<div class="adm-avis-actions"><button class="adm-btn adm-btn-danger adm-del-avis" data-i="'+i+'">Supprimer</button></div>';
+      container.appendChild(div);
+    });
+    container.querySelectorAll('.adm-del-avis').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        if(confirm('Supprimer cet avis ?')){var l=get('avis');l.splice(parseInt(btn.dataset.i),1);save('avis',l);renderAdmAvis();renderAvis();}
+      });
+    });
+  }
+
+  function saveAdmAvis(){
+    var list=get('avis');
+    list.forEach(function(a,i){
+      var t=document.querySelector('.avis-txt-'+i);if(t)a.texte=t.value;
+      var n=document.querySelector('.avis-nom-'+i);if(n)a.nom=n.value;
+      var r=document.querySelector('.avis-role-'+i);if(r)a.role=r.value;
+    });
+    save('avis',list);
+  }
+
+  document.getElementById('adm-add-avis').addEventListener('click',function(){
+    var list=get('avis');list.push({texte:'Nouvel avis — modifie ce texte',nom:'Prénom',role:'Client · Type de shooting'});
+    save('avis',list);renderAdmAvis();renderAvis();
+  });
+
+  /* ===== PACKS ADMIN ===== */
+  function renderAdmPacks(){
+    renderAdmPackList('adm-packs-photo-list','packsPhoto');
+    renderAdmPackList('adm-packs-com-list','packsCom');
+  }
+  function renderAdmPackList(containerId, key){
+    var list=get(key);
+    var container=document.getElementById(containerId);
+    if(!container)return;
+    container.innerHTML='';
+    list.forEach(function(p,i){
+      var div=document.createElement('div');div.className='adm-avis-item';
+      div.innerHTML='<div class="adm-field"><label>Nom du pack</label><input class="'+key+'-nom-'+i+'" value="'+escHtml(p.nom)+'"></div>'+
+        '<div class="adm-field"><label>Slogan</label><input class="'+key+'-slogan-'+i+'" value="'+escHtml(p.slogan)+'"></div>'+
+        '<div class="adm-field"><label>Description (1 ligne = 1 puce)</label><textarea class="'+key+'-desc-'+i+'">'+escHtml(p.desc)+'</textarea></div>'+
+        '<div class="adm-field"><label>Texte du bouton</label><input class="'+key+'-cta-'+i+'" value="'+escHtml(p.cta)+'"></div>'+
+        '<div class="adm-avis-actions"><button class="adm-btn adm-btn-danger adm-del-pack" data-key="'+key+'" data-i="'+i+'">Supprimer</button></div>';
+      container.appendChild(div);
+    });
+    container.querySelectorAll('.adm-del-pack').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        if(confirm('Supprimer ce pack ?')){
+          var l=get(btn.dataset.key);l.splice(parseInt(btn.dataset.i),1);
+          save(btn.dataset.key,l);renderAdmPacks();renderPacks();
+        }
+      });
+    });
+  }
+  function saveAdmPacks(){
+    ['packsPhoto','packsCom'].forEach(function(key){
+      var list=get(key);
+      list.forEach(function(p,i){
+        var n=document.querySelector('.'+key+'-nom-'+i);if(n)p.nom=n.value;
+        var s=document.querySelector('.'+key+'-slogan-'+i);if(s)p.slogan=s.value;
+        var d=document.querySelector('.'+key+'-desc-'+i);if(d)p.desc=d.value;
+        var c=document.querySelector('.'+key+'-cta-'+i);if(c)p.cta=c.value;
+      });
+      save(key,list);
+    });
+  }
+  document.getElementById('adm-add-pack-photo').addEventListener('click',function(){
+    var list=get('packsPhoto');list.push({nom:'Nouveau pack',slogan:'Slogan du pack',desc:'Description du pack',cta:'Réserver'});
+    save('packsPhoto',list);renderAdmPacks();renderPacks();
+  });
+  document.getElementById('adm-add-pack-com').addEventListener('click',function(){
+    var list=get('packsCom');list.push({nom:'Nouveau pack',slogan:'Slogan du pack',desc:'Première ligne\nDeuxième ligne',cta:'Réserver'});
+    save('packsCom',list);renderAdmPacks();renderPacks();
+  });
+
+  document.getElementById('adm-save-pwd').addEventListener('click',function(){
+    var p1=document.getElementById('adm-new-pwd').value;
+    var p2=document.getElementById('adm-new-pwd2').value;
+    var msg=document.getElementById('adm-pwd-msg');
+    if(!p1){msg.style.color='#C97070';msg.textContent='Saisis un mot de passe.';return;}
+    if(p1!==p2){msg.style.color='#C97070';msg.textContent='Les mots de passe ne correspondent pas.';return;}
+    if(p1.length<6){msg.style.color='#C97070';msg.textContent='Minimum 6 caractères.';return;}
+    save('password',p1);msg.style.color='#7ABF7A';msg.textContent='Mot de passe mis à jour !';
+    document.getElementById('adm-new-pwd').value='';document.getElementById('adm-new-pwd2').value='';
+    setTimeout(function(){msg.textContent='';},3000);
+  });
+
+  document.getElementById('adm-logout').addEventListener('click',function(){
+    document.getElementById('adm-main').style.display='none';
+    document.getElementById('adm-login').style.display='block';
+    closeAdmin();
+  });
+}
+
+/* ===== ROUTING PAGES (accueil / packs) ===== */
+var pageHome = document.getElementById('page-home');
+var pagePacks = document.getElementById('page-packs');
+
+function showPacks(targetId) {
+  pageHome.style.display = 'none';
+  pagePacks.style.display = 'block';
+  window.scrollTo(0, 0);
+  if (targetId) {
+    setTimeout(function() {
+      var el = document.getElementById(targetId);
+      if (el) {
+        var y = el.getBoundingClientRect().top + window.scrollY - 90;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }, 50);
+  }
+}
+
+function showHome() {
+  pagePacks.style.display = 'none';
+  pageHome.style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+/* Lien "Packs" du menu */
+var navPacks = document.getElementById('nav-packs');
+if (navPacks) navPacks.addEventListener('click', function(e) { e.preventDefault(); showPacks(); });
+
+/* Boutons "Voir les packs" de la section services */
+document.querySelectorAll('.svc-link[data-pack]').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    showPacks(link.dataset.pack);
+  });
+});
+
+/* Bouton retour à l'accueil */
+var packsRetour = document.getElementById('packs-retour');
+if (packsRetour) packsRetour.addEventListener('click', function(e) { e.preventDefault(); showHome(); });
+
+/* Boutons "Réserver/Contact" de la page packs → retour accueil + section contact */
+document.querySelectorAll('.go-contact').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    showHome();
+    setTimeout(function() {
+      var cta = document.getElementById('cta');
+      if (cta) cta.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+  });
+});
+
+/* ===== INIT ===== */
+renderSite();
+setupReveal();
+</script>
+</body>
+</html>
